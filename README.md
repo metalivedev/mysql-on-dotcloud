@@ -1,16 +1,16 @@
-Custom MySQL Installation for dotCloud Platform -- ALPHA QUALITY
+#Custom MySQL Installation for dotCloud Platform -- ALPHA QUALITY
 
 You should probably use the standard *mysql* service from dotCloud --
 this one is definitely experimental. But if for some reason you need
 to run the latest MySQL and don't care about high availability or
 failover, then this is one place to start.
 
-Step 1: Get the MySQL Binary Tarball from Oracle
+##Step 1: Get the MySQL Binary Tarball from Oracle
 
 You can download MySQL generic binary from
 http://dev.mysql.com/get/Downloads/MySQL-5.6/mysql-5.6.12-linux-glibc2.5-x86_64.tar.gz/from/http://cdn.mysql.com/
 
-Step 2: (for sanity) Repack the Tarball
+##Step 2: (for sanity) Repack the Tarball
 
 The tarball is almost 400M and includes a bunch of tests and binaries you
 probably don't need. The huge tarball will slow down your deployments
@@ -19,11 +19,11 @@ from there to your service. We can shrink it down to about 79M by
 removing the debug binaries and tests. Tar that back up and put it in
 the ``testbed`` directory as *something*.tar.gz
 
-Step 3: dotcloud create and push
+##Step 3: dotcloud create and push
 
 Do the normal thing for dotCloud. You've got the CLI, right?
 
-What happens during the installation?
+###What happens during the installation?
 
 Once your files are uploaded to the internal dotCloud Uploader
 service, they get labeled with the revision and then copied to the
@@ -71,17 +71,17 @@ configuration, we can initialize the database:
 Finally supervisord starts the database by running the script we
 specified in the *process* section of ``dotcloud.yml``: ``starttest``.
 
-Step 4: Scale RAM
+##Step 4: Scale RAM
 
 The default size of a *custom* type is 128M, but it appears that this
 mySQL installation requires at least 512M, so you'll need to
 ``dotcloud scale testbed:memory=512M``
 
-Security:
+##Security:
 
 PLEASE REMEMBER TO SET A PASSWORD FOR THE MySQL root USER !
 To do so, start the server, then issue the following commands:
 
-  /home/dotcloud/mysql/install/bin/mysqladmin --defaults-file=~/.my.cnf -u root password 'new-password'
-  /home/dotcloud/mysql/install/bin/mysqladmin --defaults-file=~/.my.cnf -u root -h *YOURAPPNAME*-default-testbed-0 password 'new-password'
+    /home/dotcloud/mysql/install/bin/mysqladmin --defaults-file=~/.my.cnf -u root password 'new-password'
+    /home/dotcloud/mysql/install/bin/mysqladmin --defaults-file=~/.my.cnf -u root -h *YOURAPPNAME*-default-testbed-0 password 'new-password'
 
