@@ -1,0 +1,10 @@
+testbed:
+  type: custom
+  approot: testbed
+  ports:
+     testbeddb: tcp
+  systempackages:
+    - libaio-dev
+  buildscript: testbed/builder
+  postinstall: ./postinstall
+  process: ~/starttest

@@ -1,0 +1,23 @@
+#!/bin/bash
+set -e
+echo I AM ... BUILDER!
+INSTALLDIR=~/mysql/install
+cd "$SERVICE_APPROOT"
+pwd
+ls -la
+
+if [ ! -d $INSTALLDIR ];
+then
+   echo Creating installation directory $INSTALLDIR and unpacking
+   mkdir -p $INSTALLDIR
+   tar --checkpoint=1000 --checkpoint-action=dot -x -C $INSTALLDIR --exclude='mysql-test/*' --exclude='sql-bench/*' --strip-components=1 -f *.tar.gz
+fi
+
+echo COPYING scripts and config
+cp starttest postinstall profile ~/
+cp my.cnf ~/.my.cnf
+echo ... done COPYING
+
+echo BUILDER is done.
+echo dotCloud Platform now takes some time to tar up the build results...
+

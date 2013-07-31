@@ -1,0 +1,9 @@
+#!/bin/bash
+set -e
+
+echo POSTINSTALL, PORT=$PORT_TESTBEDDB
+
+echo Updating port number in ~/.my.cnf...
+sed -i 's/PORT_TESTBEDDB/'$PORT_TESTBEDDB'/' ~/.my.cnf
+
+echo POSTINSTALL DONE

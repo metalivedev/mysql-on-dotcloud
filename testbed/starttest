@@ -1,0 +1,29 @@
+#!/bin/bash
+set -e
+
+# You might expect this initialization work to be done
+# in the builder or postinstall scripts, but they don't
+# have access to ~/data, which doesn't get moved over to
+# the new container until after the postinstall completes
+# successfully.
+
+# These must correspond to what you set in my.cnf
+DATADIR=~/data/mysqldb
+LOGDIR=$DATADIR/logs
+
+if [[ ! -d $DATADIR ]];
+then
+  echo Creating logs and data directory $DATADIR and initializing database
+  mkdir -p $DATADIR
+  mkdir -p $LOGDIR
+  echo DATA will go to $DATADIR, error logs to $LOGDIR
+  ls -l $DATADIR
+  cd ~/mysql/install && scripts/mysql_install_db --defaults-file=~/.my.cnf
+  echo ... done Creating and initializing
+else
+  echo $DATADIR exists, assuming database has been initialized.
+fi
+
+echo STARTING actual process mysqld_safe
+cat ~/environment.json
+cd ~/mysql/install && ./bin/mysqld_safe --defaults-file=~/.my.cnf
